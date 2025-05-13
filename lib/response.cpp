@@ -20,12 +20,12 @@ namespace httpServer {
         return *this;
     }
 
-    Response& Response::html(const std::string& path){
+    Response& Response::html_file(const std::string& path){
         header("Content-Type", "text/html");
-        std::ifstream html_file(path);
+        std::ifstream file(path);
         std::string str;
-        if(html_file.is_open()) {
-            while (std::getline(html_file, str))
+        if(file.is_open()) {
+            while (std::getline(file, str))
                 *this << str;
         }
         else
@@ -33,9 +33,22 @@ namespace httpServer {
         return *this;
     }
 
+    Response& Response::html_str(const std::string& html_code) {
+        header("Content-Type", "text/html");
+        *this << html_code;
+        return *this;
+    }
+
     Response& Response::json(const std::string& data) {
         header("Content-Type", "application/json");
         body = data;
         return *this;
+    }
+
+    Response::operator std::string() const {
+        std::ostringstream ss;
+        ss << "HTTP/1.1 ";
+        ss << status << headers << "\r\n\r\n" << body << "\r\n";
+        return ss.str();
     }
 }

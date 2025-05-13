@@ -12,6 +12,8 @@ namespace httpServer {
         std::string version;
         std::string body; 
         std::map<std::string, std::string> headers;
+        std::map<std::string, std::string> query;
+        std::map<std::string, std::string> form;
     };
 }
 
